@@ -2,9 +2,18 @@ import pygtk
 pygtk.require('2.0')
 from gtk import *
 
+import panels
 
 class Controller:
     ## Internal methods ##
+
+    def display_panel(self, panel):
+        if self.current_panel <> None:
+            self.table.remove(self.current_panel)
+
+        self.table.attach(panel, 1, 2, 0, 1)
+        panel.show()
+        self.current_panel = panel
 
     def select_prev_panel(self):
         def previous(model, tree_iter):
@@ -21,16 +30,13 @@ class Controller:
         sel = self.panel_list.get_selection()
         prev_iter = previous(self.panel_list_store, sel.get_selected()[1])
         if prev_iter <> None:
-            sel.unselect_all()
             sel.select_path(self.panel_list_store.get_path(prev_iter))
 
     def select_next_panel(self):
         sel = self.panel_list.get_selection()
         next_iter = self.panel_list_store.iter_next(sel.get_selected()[1])
         if next_iter <> None:
-            sel.unselect_all()
             sel.select_path(self.panel_list_store.get_path(next_iter))
-
 
     ## Event handlers ##
 
@@ -62,6 +68,11 @@ class Controller:
         
         return True  # stop the event from triggering stuff we don't want
 
+    def selected_panel_changed(self, tree_selection):
+        sel_iter = self.panel_list.get_selection().get_selected()[1]
+        panel = self.panel_list_store.get_value(sel_iter, 1)
+        self.display_panel(panel)
+
     # Close event handler
     def delete_event(self, widget, event, data=None):
         return False
@@ -72,13 +83,6 @@ class Controller:
     def __init__(self):
         window = Window(WINDOW_TOPLEVEL)
 
-        # Event handlers
-        window.connect("delete_event", self.delete_event)
-        window.connect("destroy", self.destroy)
-        window.connect("focus-in-event", self.get_focus)
-        window.connect("focus-out-event", self.lose_focus)
-        window.connect("key-press-event", self.key_press)
-
         window.set_events(gdk.KEY_PRESS_MASK)
 
         # Properties
@@ -87,10 +91,10 @@ class Controller:
         window.set_border_width(5)
 
         # Sample list data
-        panel_list_store = ListStore(str)
-        panel_list_store.append(["Foo"])
-        panel_list_store.append(["Bar"])
-        panel_list_store.append(["Baz"])
+        panel_list_store = ListStore(str, Widget)
+        panel_list_store.append(["Foo", panels.create_panel("Foo")])
+        panel_list_store.append(["Bar", panels.create_panel("Bar")])
+        panel_list_store.append(["Baz", panels.create_panel("Baz")])
 
         # Panel list
         panel_list = TreeView(panel_list_store)
@@ -110,11 +114,25 @@ class Controller:
         window.add(table)
         window.show_all()
         
+        # Event handlers
+        window.connect("delete_event", self.delete_event)
+        window.connect("destroy", self.destroy)
+        window.connect("focus-in-event", self.get_focus)
+        window.connect("focus-out-event", self.lose_focus)
+        window.connect("key-press-event", self.key_press)
+
+        panel_list.get_selection().connect("changed", self.selected_panel_changed)
+
         # Set class variables
         self.panel_list_store = panel_list_store
         self.panel_list = panel_list
         self.window = window
         self.table = table
+
+        self.current_panel = None
+
+        # Display the first panel
+        self.selected_panel_changed(panel_list.get_selection())
 
     def main(self):
         main()
