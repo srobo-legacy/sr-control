@@ -9,9 +9,9 @@ class Controller:
 
     def display_panel(self, panel):
         if self.current_panel <> None:
-            self.table.remove(self.current_panel)
+            self.hpaned.remove(self.current_panel)
 
-        self.table.attach(panel, 1, 2, 0, 1)
+        self.hpaned.pack2(panel)
         panel.show()
         self.current_panel = panel
 
@@ -107,11 +107,12 @@ class Controller:
         panel_list.get_selection().select_path(first_path)
         panel_list.show()
 
-        # Table
-        table = Table(1, 2, False)
-        table.attach(panel_list, 0, 1, 0, 1, SHRINK)
+        # Horizontal paning
+        hpaned = HPaned()
+        hpaned.pack1(panel_list)
+        hpaned.set_position(128)
 
-        window.add(table)
+        window.add(hpaned)
         window.show_all()
         
         # Event handlers
@@ -127,7 +128,7 @@ class Controller:
         self.panel_list_store = panel_list_store
         self.panel_list = panel_list
         self.window = window
-        self.table = table
+        self.hpaned = hpaned
 
         self.current_panel = None
 
