@@ -1,8 +1,10 @@
+import gobject
 import pygtk
 pygtk.require('2.0')
 from gtk import *
-
 import panels
+
+UPDATE_FREQUENCY = 1000
 
 class Controller:
     ## Internal methods ##
@@ -13,6 +15,7 @@ class Controller:
 
         self.hpaned.pack2(panel)
         panel.show()
+        panel.emit("panel-update")
         self.current_panel = panel
 
     def select_prev_panel(self):
@@ -47,7 +50,7 @@ class Controller:
         print "lose focus"
 
     def key_press(self, widget, event):
-        # I only managed to find the keysyms members in gdkkeysyms.h
+        # I only managed to find the keysyms members by guessing from gdkkeysyms.h
         if event.keyval == keysyms.Up:
             print "Up"
 
@@ -80,6 +83,19 @@ class Controller:
     def destroy(self, widget, data=None):
         main_quit()
 
+    ## Update timer ##
+
+    def start_timer(self):
+        """Starts the timer that emits update signals at the current panel."""
+        gobject.timeout_add(UPDATE_FREQUENCY, self.timer_tick)
+
+    def timer_tick(self):
+        """Emits an update signal at the current panel."""
+        self.current_panel.emit("panel-update")
+        return True
+
+    ## Constructor ##
+
     def __init__(self):
         window = Window(WINDOW_TOPLEVEL)
 
@@ -89,6 +105,10 @@ class Controller:
         window.set_property("default-width", 480)
         window.set_property("default-height", 272)
         window.set_border_width(5)
+
+        # Update timer (registering custom signal)
+        gobject.signal_new("panel-update", Widget, gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ())
+        self.start_timer()
 
         # Sample list data
         panel_list_store = ListStore(str, Widget)
