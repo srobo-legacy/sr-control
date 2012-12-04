@@ -44,10 +44,11 @@ class Controller:
     ## Event handlers ##
 
     def get_focus(self, widget, event, data=None):
-        print "get focus"
+        if not self.timer_on:
+            self.start_timer()
 
     def lose_focus(self, widget, event, data=None):
-        print "lose focus"
+        self.stop_timer()
 
     def key_press(self, widget, event):
         # I only managed to find the keysyms members by guessing from gdkkeysyms.h
@@ -88,11 +89,18 @@ class Controller:
     def start_timer(self):
         """Starts the timer that emits update signals at the current panel."""
         gobject.timeout_add(UPDATE_FREQUENCY, self.timer_tick)
+        self.timer_on = True
 
     def timer_tick(self):
         """Emits an update signal at the current panel."""
+        if not self.timer_on:
+            return False
+
         self.current_panel.emit("panel-update")
         return True
+
+    def stop_timer(self):
+        self.timer_on = False
 
     ## Constructor ##
 
