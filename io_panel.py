@@ -31,6 +31,9 @@ class IOPanel(Table):
             l.modify_font(pango.FontDescription(font_description))
             return l
 
+        def create_column_label(num):
+            return Label(str(num))
+
         def create_analogue_input(num):
             # TODO: implement properly
             # analogue inputs will have a vertical bar behind them
@@ -55,26 +58,30 @@ class IOPanel(Table):
         ## Inputs ##
         self.attach(create_heading("Inputs", "sans bold 12"), 0, NUM_IO_PINS, 0, 1)#, yoptions=FILL)
 
+        # Column labels
+        for i in range(NUM_IO_PINS):
+            self.attach(create_column_label(i), i, i + 1, 1, 2)
+
         # Analogue inputs
-        self.attach(create_heading("Analogue", "sans 10"), 0, NUM_IO_PINS, 1, 2)#, yoptions=FILL)
+        self.attach(create_heading("Analogue", "sans 10"), 0, NUM_IO_PINS, 2, 3)#, yoptions=FILL)
         self.inputs_a = []
         for i in range(NUM_IO_PINS):
             self.inputs_a.append(create_analogue_input(i))
-            self.attach(self.inputs_a[i], i, i + 1, 2, 3)
+            self.attach(self.inputs_a[i], i, i + 1, 3, 4)
 
         # Digital inputs
-        self.attach(create_heading("Digital", "sans 10"), 0, NUM_IO_PINS, 3, 4)
+        self.attach(create_heading("Digital", "sans 10"), 0, NUM_IO_PINS, 4, 5)
         self.inputs_d = []
         for i in range(NUM_IO_PINS):
             self.inputs_d.append(create_digital_input(i))
-            self.attach(self.inputs_d[i], i, i + 1, 4, 5)
+            self.attach(self.inputs_d[i], i, i + 1, 5, 6)
 
         ## Outputs ##
-        self.attach(create_heading("Outputs", "sans bold 12"), 0, NUM_IO_PINS, 5, 6)
+        self.attach(create_heading("Outputs", "sans bold 12"), 0, NUM_IO_PINS, 6, 7)
         self.outputs = []
         for i in range(NUM_IO_PINS):
             self.outputs.append(create_output(i))
-            self.attach(self.outputs[i], i, i + 1, 6, 7)
+            self.attach(self.outputs[i], i, i + 1, 7, 8)
 
         self.show_all()
 
