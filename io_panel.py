@@ -7,6 +7,19 @@ import pango
 NUM_IO_PINS = 8
 
 class IOPanel(Table):
+    def key_press(self, widget, event):
+        if event.keyval == keysyms.Up:
+            print "Up"
+
+        elif event.keyval == keysyms.Down:
+            print "Down"
+
+        elif event.keyval == keysyms.Page_Up:
+            print "Page Up"
+
+        elif event.keyval == keysyms.Page_Down:
+            print "Page Down"
+
     def __init__(self, board):
         Table.__init__(self, 11, NUM_IO_PINS , False)
 
@@ -64,3 +77,6 @@ class IOPanel(Table):
             self.attach(self.outputs[i], i, i + 1, 6, 7)
 
         self.show_all()
+
+        ## Signals ##
+        self.connect("key-press-event", self.key_press)
