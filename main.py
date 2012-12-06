@@ -133,7 +133,7 @@ class Controller:
 
         window.add(hpaned)
         window.show_all()
-        
+
         # Event handlers
         window.connect("delete_event", self.delete_event)
         window.connect("destroy", self.destroy)

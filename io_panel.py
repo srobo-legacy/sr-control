@@ -4,9 +4,39 @@ from gtk import *
 
 import pango
 
+import digital_input
+
 NUM_IO_PINS = 8
 
 class IOPanel(Table):
+    ## Output selection and manipulation ##
+
+    def select_output(self, num):
+        self.outputs[num].set_state(STATE_SELECTED)
+
+    def deselect_output(self, num):
+        self.outputs[num].set_state(STATE_NORMAL)
+
+    selected_output = 0
+
+    def prev_output(self):
+        if self.selected_output > 0:
+            self.deselect_output(self.selected_output)
+            self.selected_output = self.selected_output - 1
+            self.select_output(self.selected_output)
+
+        print self.selected_output
+
+    def next_output(self):
+        if self.selected_output < NUM_IO_PINS - 1:
+            self.deselect_output(self.selected_output)
+            self.selected_output = self.selected_output + 1
+            self.select_output(self.selected_output)
+
+        print self.selected_output
+
+    ## Event handlers ##
+
     def key_press(self, widget, event):
         if event.keyval == keysyms.Up:
             print "Up"
@@ -15,13 +45,15 @@ class IOPanel(Table):
             print "Down"
 
         elif event.keyval == keysyms.Page_Up:
-            print "Page Up"
+            self.prev_output()
 
         elif event.keyval == keysyms.Page_Down:
-            print "Page Down"
+            self.next_output()
+
+    ## Constructor ##
 
     def __init__(self, board):
-        Table.__init__(self, 11, NUM_IO_PINS , False)
+        Table.__init__(self, 11, NUM_IO_PINS)
 
         def create_heading(text, font_description):
             """Creates a new label with the given text and font, which is centre aligned."""
@@ -43,7 +75,7 @@ class IOPanel(Table):
         def create_digital_input(num):
             # TODO: implement properly
             # digital inputs will be highlighted by a rounded rectangle when on
-            return Label(str((78 >> num) & 1))
+            return digital_input.DigitalInput(None, num)
 
         def create_output(num):
             # TODO: implement properly
@@ -53,6 +85,7 @@ class IOPanel(Table):
             t = Table(2, 1, True)
             t.attach(l, 0, 1, 0, 1)
             t.attach(b, 0, 1, 1, 2)
+            t.modify_bg(STATE_SELECTED, gdk.Color(blue=0.8))
             return t
 
         ## Inputs ##
