@@ -73,9 +73,7 @@ class IOPanel(Table):
             return Label(str(num * 0.33) + "V")
 
         def create_digital_input(num):
-            # TODO: implement properly
-            # digital inputs will be highlighted by a rounded rectangle when on
-            return digital_input.DigitalInput(None, num)
+            return digital_input.DigitalInput((78 >> input_num) & 1)
 
         def create_output(num):
             # TODO: implement properly
@@ -106,7 +104,7 @@ class IOPanel(Table):
         self.attach(create_heading("Digital", "sans 10"), 0, NUM_IO_PINS, 4, 5)
         self.inputs_d = []
         for i in range(NUM_IO_PINS):
-            self.inputs_d.append(create_digital_input(i))
+            self.inputs_d.append(digital_input.DigitalInput((78 >> i) & 1))
             self.attach(self.inputs_d[i], i, i + 1, 5, 6)
 
         ## Outputs ##
