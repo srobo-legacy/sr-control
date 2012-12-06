@@ -27,7 +27,7 @@ class IOPanel(Table):
         def create_digital_input(num):
             # TODO: implement properly
             # digital inputs will be highlighted by a rounded rectangle when on
-            return Label(str((78 >> num) & 1))
+            return digital_input.DigitalInput(None, num)
 
         def create_output(num):
             # TODO: implement properly
