@@ -5,6 +5,7 @@ from gtk import *
 import pango
 
 import digital_input
+import analogue_input
 
 NUM_IO_PINS = 8
 
@@ -66,12 +67,6 @@ class IOPanel(Table):
         def create_column_label(num):
             return Label(str(num))
 
-        def create_analogue_input(num):
-            # TODO: implement properly
-            # analogue inputs will have a vertical bar behind them
-            # (height indicating value)
-            return Label(str(num * 0.3) + "V")
-
         def create_output(num):
             # TODO: implement properly
             # outputs will display as the value above a switch icon
@@ -94,7 +89,7 @@ class IOPanel(Table):
         self.attach(create_heading("Analogue", "sans 10"), 0, NUM_IO_PINS, 2, 3)#, yoptions=FILL)
         self.inputs_a = []
         for i in range(NUM_IO_PINS):
-            self.inputs_a.append(create_analogue_input(i))
+            self.inputs_a.append(analogue_input.AnalogueInput(i * 3.3 / 8))
             self.attach(self.inputs_a[i], i, i + 1, 3, 4)
 
         # Digital inputs
