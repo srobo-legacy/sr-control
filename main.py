@@ -52,24 +52,15 @@ class Controller:
 
     def key_press(self, widget, event):
         # I only managed to find the keysyms members by guessing from gdkkeysyms.h
-        if event.keyval == keysyms.Up:
-            print "Up"
-
-        elif event.keyval == keysyms.Down:
-            print "Down"
-
-        elif event.keyval == keysyms.Left:
+        if event.keyval == keysyms.Left:
             self.select_prev_panel()
 
         elif event.keyval == keysyms.Right:
             self.select_next_panel()
 
-        elif event.keyval == keysyms.Page_Up:
-            print "Page up"
+        else:
+            self.current_panel.emit("key-press-event", event)
 
-        elif event.keyval == keysyms.Page_Down:
-            print "Page down"
-        
         return True  # stop the event from triggering stuff we don't want
 
     def selected_panel_changed(self, tree_selection):
