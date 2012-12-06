@@ -86,7 +86,7 @@ class IOPanel(Table):
             self.attach(create_column_label(i), i, i + 1, 1, 2)
 
         # Analogue inputs
-        self.attach(create_heading("Analogue", "sans 10"), 0, NUM_IO_PINS, 2, 3)#, yoptions=FILL)
+        self.attach(create_heading("Analogue (V)", "sans 10"), 0, NUM_IO_PINS, 2, 3)#, yoptions=FILL)
         self.inputs_a = []
         for i in range(NUM_IO_PINS):
             self.inputs_a.append(analogue_input.AnalogueInput(i * 3.3 / 8))

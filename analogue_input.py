@@ -30,9 +30,9 @@ class AnalogueInput(Widget):
         self.value = value
 
         if self.value > _MAX_INPUT_VOLTAGE / 2:
-            markup = str.format('<span color="white">{:.1f}V</span>', self.value)
+            markup = str.format('<span color="white">{:.1f}</span>', self.value)
         else:
-            markup = str.format('<span color="black">{:.1f}V</span>', self.value)
+            markup = str.format('<span color="black">{:.1f}</span>', self.value)
 
         self._layout.set_markup(markup)
 
@@ -87,7 +87,7 @@ class AnalogueInput(Widget):
         # In this case, we say that we want to be as big as the
         # text is, plus a little border around it.
         width, height = self._layout.get_size()
-        requisition.width = width // pango.SCALE + _BORDER_WIDTH*3
+        requisition.width = width // pango.SCALE + _BORDER_WIDTH
         requisition.height = height // pango.SCALE + _BORDER_WIDTH*2
 
     def do_size_allocate(self, allocation):
