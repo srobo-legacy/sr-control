@@ -47,24 +47,3 @@ class DigitalInput(InputWidget):
             cr.stroke()
 
 gobject.type_register(DigitalInput)
-
-def _main(args):
-    win = Window()
-    win.set_border_width(5)
-    win.set_title('Widget test')
-    win.connect('delete-event', main_quit)
-
-    t = Table(1, 2, True)
-
-    w = DigitalInput(1)
-    t.attach(w, 0, 1, 0, 1)
-    x = DigitalInput(0)
-    t.attach(x, 0, 1, 1, 2)
-    win.add(t)
-
-    win.show_all()
-
-    main()
-
-if __name__ == '__main__':
-    sys.exit(_main(sys.argv))
