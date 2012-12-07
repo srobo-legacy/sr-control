@@ -19,7 +19,7 @@ except ImportError:
 
 from input_widget import InputWidget
 
-_BORDER_WIDTH = 5
+_BORDER_WIDTH = 2  # Excludes line width
 _INPUT_ON_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
 # TODO: Put the on color in some common location
 
@@ -41,13 +41,19 @@ class AnalogueInput(InputWidget):
     def _draw_rectangle(self, cr, w, h):
         if self.value > 0:
             # Draw a filled rounded rectangle
-            # TODO: take the line width into account
-            top = (1 - self.value / _MAX_INPUT_VOLTAGE) * (h - 2*_BORDER_WIDTH) + _BORDER_WIDTH
+            inner_height = h - 2 * _BORDER_WIDTH
+            top = (1 - self.value / _MAX_INPUT_VOLTAGE) * inner_height
+            line_width = min(5, inner_height - top)
+            padding = line_width / 2
+
+            cr.rectangle(_BORDER_WIDTH + padding,
+                         top + _BORDER_WIDTH + padding,
+                         w - 2 * (_BORDER_WIDTH + padding),
+                         h - 2 * (_BORDER_WIDTH + padding) - top)
+
             cr.set_source_color(_INPUT_ON_COLOR)
-            cr.rectangle(_BORDER_WIDTH, top,
-                         w - 2*_BORDER_WIDTH, h - _BORDER_WIDTH - top)
             cr.fill_preserve()
-            cr.set_line_width(5.0)
+            cr.set_line_width(line_width)
             cr.set_line_join(cairo.LINE_JOIN_ROUND)
             cr.stroke()
 
