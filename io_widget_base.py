@@ -21,7 +21,7 @@ _BORDER_WIDTH = 5
 _INPUT_ON_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
 # TODO: Put the on color in some common location
 
-class InputWidget(Widget):
+class IOWidgetBase(Widget):
 
     def _get_markup(self, value):
         return '<span color="red">Dummy</span>'
@@ -31,9 +31,10 @@ class InputWidget(Widget):
         return
 
     def set_value(self, value):
-        """Set the value displayed by the InputWidget."""
+        """Set the value displayed by the IOWidgetBase."""
         self.value = value
         self._layout.set_markup(self._get_markup(value))
+        # TODO: force redraw
 
     ## Constructor ##
 
@@ -107,4 +108,4 @@ class InputWidget(Widget):
         cr.update_layout(self._layout)
         cr.show_layout(self._layout)
 
-gobject.type_register(InputWidget)
+gobject.type_register(IOWidgetBase)

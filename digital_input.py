@@ -17,15 +17,15 @@ try:
 except ImportError:
     raise SystemExit("cairo required")
 
-from input_widget import InputWidget
+from io_widget_base import IOWidgetBase
 
 _BORDER_WIDTH = 5
 _INPUT_ON_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
 
-class DigitalInput(InputWidget):
+class DigitalInput(IOWidgetBase):
 
     def __init__(self, value):
-        InputWidget.__init__(self, value)
+        IOWidgetBase.__init__(self, value)
 
     ## Internal Methods ##
 
