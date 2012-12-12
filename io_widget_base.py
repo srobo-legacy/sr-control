@@ -34,7 +34,7 @@ class IOWidgetBase(Widget):
         """Set the value displayed by the IOWidgetBase."""
         self.value = value
         self._layout.set_markup(self._get_markup(value))
-        # TODO: force redraw
+        self.queue_draw()
 
     ## Constructor ##
 

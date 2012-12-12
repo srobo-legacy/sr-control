@@ -4,9 +4,9 @@ from gtk import *
 
 import pango
 
-import digital_input
-import analogue_input
-import output_switch
+from digital_input import DigitalInput
+from analogue_input import AnalogueInput
+from output_switch import OutputSwitch
 
 NUM_IO_PINS = 8
 
@@ -29,7 +29,6 @@ class IOPanel(Table):
 
     def set_output(self, num, value):
         self.outputs[num].set_value(value)
-        self.outputs[num].queue_draw()
         # TODO: Actually set the value
 
     ## Event handlers ##
@@ -64,31 +63,33 @@ class IOPanel(Table):
             return Label(str(num))
 
         ## Inputs ##
-        self.attach(create_heading("Inputs", "sans bold 12"), 0, NUM_IO_PINS, 0, 1)#, yoptions=FILL)
+        self.attach(create_heading("Inputs", "sans bold 12"), 0, NUM_IO_PINS, 0, 1)
 
         # Column labels
         for i in range(NUM_IO_PINS):
-            self.attach(create_column_label(i), i, i + 1, 1, 2)
+            self.attach(create_column_label(i), i, i + 1, 1, 2, yoptions=SHRINK)
 
         # Analogue inputs
-        self.attach(create_heading("Analogue (V)", "sans 10"), 0, NUM_IO_PINS, 2, 3)#, yoptions=FILL)
+        self.attach(create_heading("Analogue (V)", "sans 10"), 0, NUM_IO_PINS, 2, 3,
+                                   yoptions=SHRINK)
         self.inputs_a = []
         for i in range(NUM_IO_PINS):
-            self.inputs_a.append(analogue_input.AnalogueInput(i * 3.3 / 8))
+            self.inputs_a.append(AnalogueInput(i * 3.3 / 8))
             self.attach(self.inputs_a[i], i, i + 1, 3, 4)
 
         # Digital inputs
-        self.attach(create_heading("Digital", "sans 10"), 0, NUM_IO_PINS, 4, 5)
+        self.attach(create_heading("Digital", "sans 10"), 0, NUM_IO_PINS, 4, 5,
+                                   yoptions=SHRINK)
         self.inputs_d = []
         for i in range(NUM_IO_PINS):
-            self.inputs_d.append(digital_input.DigitalInput((78 >> i) & 1))
+            self.inputs_d.append(DigitalInput((78 >> i) & 1))
             self.attach(self.inputs_d[i], i, i + 1, 5, 6)
 
         ## Outputs ##
         self.attach(create_heading("Outputs", "sans bold 12"), 0, NUM_IO_PINS, 6, 7)
         self.outputs = []
         for i in range(NUM_IO_PINS):
-            self.outputs.append(output_switch.OutputSwitch((82 >> i) & 1))
+            self.outputs.append(OutputSwitch((82 >> i) & 1))
             self.attach(self.outputs[i], i, i + 1, 7, 8)
 
         self.outputs[0].set_state(STATE_SELECTED)
