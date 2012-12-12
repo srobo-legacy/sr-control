@@ -6,44 +6,40 @@ import pango
 
 import digital_input
 import analogue_input
+import output_switch
 
 NUM_IO_PINS = 8
 
 class IOPanel(Table):
     ## Output selection and manipulation ##
 
-    def select_output(self, num):
-        self.outputs[num].set_state(STATE_SELECTED)
-
-    def deselect_output(self, num):
-        self.outputs[num].set_state(STATE_NORMAL)
-
     selected_output = 0
 
     def prev_output(self):
         if self.selected_output > 0:
-            self.deselect_output(self.selected_output)
+            self.outputs[self.selected_output].set_state(STATE_NORMAL)
             self.selected_output = self.selected_output - 1
-            self.select_output(self.selected_output)
-
-        print self.selected_output
+            self.outputs[self.selected_output].set_state(STATE_SELECTED)
 
     def next_output(self):
         if self.selected_output < NUM_IO_PINS - 1:
-            self.deselect_output(self.selected_output)
+            self.outputs[self.selected_output].set_state(STATE_NORMAL)
             self.selected_output = self.selected_output + 1
-            self.select_output(self.selected_output)
+            self.outputs[self.selected_output].set_state(STATE_SELECTED)
 
-        print self.selected_output
+    def set_output(self, num, value):
+        self.outputs[num].set_value(value)
+        self.outputs[num].queue_draw()
+        # TODO: Actually set the value
 
     ## Event handlers ##
 
     def key_press(self, widget, event):
         if event.keyval == keysyms.Up:
-            print "Up"
+            self.set_output(self.selected_output, 1)
 
         elif event.keyval == keysyms.Down:
-            print "Down"
+            self.set_output(self.selected_output, 0)
 
         elif event.keyval == keysyms.Page_Up:
             self.prev_output()
@@ -66,17 +62,6 @@ class IOPanel(Table):
 
         def create_column_label(num):
             return Label(str(num))
-
-        def create_output(num):
-            # TODO: implement properly
-            # outputs will display as the value above a switch icon
-            l = Label(str((82 >> num) & 1))
-            b = Label("[ ]")
-            t = Table(2, 1, True)
-            t.attach(l, 0, 1, 0, 1)
-            t.attach(b, 0, 1, 1, 2)
-            t.modify_bg(STATE_SELECTED, gdk.Color(blue=0.8))
-            return t
 
         ## Inputs ##
         self.attach(create_heading("Inputs", "sans bold 12"), 0, NUM_IO_PINS, 0, 1)#, yoptions=FILL)
@@ -103,8 +88,10 @@ class IOPanel(Table):
         self.attach(create_heading("Outputs", "sans bold 12"), 0, NUM_IO_PINS, 6, 7)
         self.outputs = []
         for i in range(NUM_IO_PINS):
-            self.outputs.append(create_output(i))
+            self.outputs.append(output_switch.OutputSwitch((82 >> i) & 1))
             self.attach(self.outputs[i], i, i + 1, 7, 8)
+
+        self.outputs[0].set_state(STATE_SELECTED)
 
         self.show_all()
 
