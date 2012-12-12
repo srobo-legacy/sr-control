@@ -20,6 +20,7 @@ except ImportError:
 from io_widget_base import IOWidgetBase
 
 _BORDER_WIDTH = 5
+_INPUT_OFF_COLOR = gdk.Color(1.0, 1.0, 1.0)  # Must be .0
 _INPUT_ON_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
 
 class DigitalInput(IOWidgetBase):
@@ -36,15 +37,18 @@ class DigitalInput(IOWidgetBase):
             return '<span color="black">0</span>'
 
     def _draw_rectangle(self, cr, w, h):
+        # Draw a filled rounded rectangle
         if self.value == 1:
-            # Draw a filled rounded rectangle
             cr.set_source_color(_INPUT_ON_COLOR)
-            cr.rectangle(_BORDER_WIDTH, _BORDER_WIDTH,
-                         w - 2*_BORDER_WIDTH, h - 2*_BORDER_WIDTH)
-            cr.fill_preserve()
-            cr.set_line_width(5.0)
-            cr.set_line_join(cairo.LINE_JOIN_ROUND)
-            cr.stroke()
+        else:
+            cr.set_source_color(_INPUT_OFF_COLOR)
+
+        cr.rectangle(_BORDER_WIDTH, _BORDER_WIDTH,
+                     w - 2*_BORDER_WIDTH, h - 2*_BORDER_WIDTH)
+        cr.fill_preserve()
+        cr.set_line_width(5.0)
+        cr.set_line_join(cairo.LINE_JOIN_ROUND)
+        cr.stroke()
 
 gobject.type_register(DigitalInput)
 
