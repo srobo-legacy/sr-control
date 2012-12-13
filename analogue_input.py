@@ -17,18 +17,20 @@ try:
 except ImportError:
     raise SystemExit("cairo required")
 
-from input_widget import InputWidget
+from io_widget_base import IOWidgetBase
 
-_BORDER_WIDTH = 5
+_BORDER_WIDTH = 2  # Excludes line width
+_INPUT_OFF_COLOR = gdk.Color(1.0, 1.0, 1.0)  # Must be .0
 _INPUT_ON_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
-# TODO: Put the on color in some common location
+_DEFAULT_LINE_WIDTH = 5.0
+# TODO: Put color in some common location
 
 _MAX_INPUT_VOLTAGE = 3.3
 
-class AnalogueInput(InputWidget):
+class AnalogueInput(IOWidgetBase):
 
     def __init__(self, value):
-        InputWidget.__init__(self, value)
+        IOWidgetBase.__init__(self, value)
 
     ## Internal Methods ##
 
@@ -40,14 +42,45 @@ class AnalogueInput(InputWidget):
 
     def _draw_rectangle(self, cr, w, h):
         if self.value > 0:
-            # Draw a filled rounded rectangle
-            # TODO: take the line width into account
-            top = (1 - self.value / _MAX_INPUT_VOLTAGE) * (h - 2*_BORDER_WIDTH) + _BORDER_WIDTH
-            cr.set_source_color(_INPUT_ON_COLOR)
-            cr.rectangle(_BORDER_WIDTH, top,
-                         w - 2*_BORDER_WIDTH, h - _BORDER_WIDTH - top)
+            inner_height = h - 2 * _BORDER_WIDTH
+            top = (1 - self.value / _MAX_INPUT_VOLTAGE) * inner_height
+            line_width = min(_DEFAULT_LINE_WIDTH, inner_height - top)
+            padding = line_width / 2
+
+            # Draw the background rectangle
+            cr.set_source_color(_INPUT_OFF_COLOR)
+            cr.rectangle(_BORDER_WIDTH + padding,
+                         _BORDER_WIDTH + padding,
+                         w - 2*(_BORDER_WIDTH + padding),
+                         h - 2*(_BORDER_WIDTH + padding))
             cr.fill_preserve()
-            cr.set_line_width(5.0)
+            cr.set_line_width(_DEFAULT_LINE_WIDTH)
+            cr.set_line_join(cairo.LINE_JOIN_ROUND)
+            cr.stroke()
+
+            # Draw a filled rounded rectangle
+            cr.rectangle(_BORDER_WIDTH + padding,
+                         top + _BORDER_WIDTH + padding,
+                         w - 2 * (_BORDER_WIDTH + padding),
+                         h - 2 * (_BORDER_WIDTH + padding) - top)
+
+            cr.set_source_color(_INPUT_ON_COLOR)
+            cr.fill_preserve()
+            cr.set_line_width(line_width)
+            #cr.set_line_join(cairo.LINE_JOIN_ROUND)
+            cr.stroke()
+
+        else:
+            # Just draw the background rectangle
+            padding = _DEFAULT_LINE_WIDTH / 2
+
+            cr.set_source_color(_INPUT_OFF_COLOR)
+            cr.rectangle(_BORDER_WIDTH + padding,
+                         _BORDER_WIDTH + padding,
+                         w - 2*(_BORDER_WIDTH + padding),
+                         h - 2*(_BORDER_WIDTH + padding))
+            cr.fill_preserve()
+            cr.set_line_width(_DEFAULT_LINE_WIDTH)
             cr.set_line_join(cairo.LINE_JOIN_ROUND)
             cr.stroke()
 
