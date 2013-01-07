@@ -2,6 +2,8 @@ import gobject
 import pygtk
 pygtk.require('2.0')
 from gtk import *
+from sr import *
+
 import panels
 
 UPDATE_FREQUENCY = 1000
@@ -95,7 +97,7 @@ class Controller:
 
     ## Constructor ##
 
-    def __init__(self):
+    def __init__(self, R):
         window = Window(WINDOW_TOPLEVEL)
 
         window.set_events(gdk.KEY_PRESS_MASK)
@@ -109,11 +111,15 @@ class Controller:
         gobject.signal_new("panel-update", Widget, gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ())
         self.start_timer()
 
-        # Sample list data
+        # List data
         panel_list_store = ListStore(str, Widget)
-        panel_list_store.append(["Foo", panels.create_panel("Foo")])
-        panel_list_store.append(["Bar", panels.create_panel("Bar")])
-        panel_list_store.append(["Baz", panels.create_panel("Baz")])
+        for i in range(len(R.io)):
+            panel_list_store.append(["I/O Board " + str(i),
+                    panels.create_panel(panels.JIO_PANEL, R.io[i])])
+
+        #panel_list_store.append(["Foo", panels.create_panel("Foo")])
+        #panel_list_store.append(["Bar", panels.create_panel("Bar")])
+        #panel_list_store.append(["Baz", panels.create_panel("Baz")])
 
         # Panel list
         panel_list = TreeView(panel_list_store)
@@ -158,5 +164,5 @@ class Controller:
         main()
 
 
-cont = Controller()
+cont = Controller(Robot(init_vision = False))
 cont.main()
