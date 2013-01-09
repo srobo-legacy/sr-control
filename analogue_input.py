@@ -17,7 +17,8 @@ try:
 except ImportError:
     raise SystemExit("cairo required")
 
-from io_widget_base import IOWidgetBase, DEFAULT_LINE_WIDTH
+from rect_base import DEFAULT_LINE_WIDTH
+from io_widget_base import IOWidgetBase
 
 _BORDER_WIDTH = 2  # Excludes line width
 _INPUT_OFF_COLOR = gdk.Color(1.0, 1.0, 1.0)  # Must be .0
