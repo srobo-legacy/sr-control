@@ -15,6 +15,7 @@ except ImportError:
 
 DEFAULT_LINE_WIDTH = 5.0
 BORDER_WIDTH = 5
+_SELECTED_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
 
 class RectBase(Widget):
 
