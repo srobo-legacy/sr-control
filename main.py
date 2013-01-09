@@ -11,10 +11,11 @@ class Controller:
 
     def display_panel(self, panel):
         if self.current_panel <> None:
+            self.current_panel.hide_all()
             self.hpaned.remove(self.current_panel)
 
         self.hpaned.pack2(panel)
-        panel.show()
+        panel.show_all()
         panel.emit("panel-update")
         self.current_panel = panel
 
