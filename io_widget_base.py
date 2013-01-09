@@ -18,8 +18,7 @@ except ImportError:
     raise SystemExit("cairo required")
 
 _BORDER_WIDTH = 5
-_INPUT_ON_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
-# TODO: Put the on color in some common location
+DEFAULT_LINE_WIDTH = 5.0
 
 class IOWidgetBase(Widget):
 
@@ -75,7 +74,6 @@ class IOWidgetBase(Widget):
 
     def do_unrealize(self):
         # responsible for freeing the GDK resources
-
         # De-associate the window we created in do_realize with ourselves
         self.window.set_user_data(None)
 
@@ -94,13 +92,22 @@ class IOWidgetBase(Widget):
         if self.flags() & REALIZED:
             self.window.move_resize(*allocation)
 
+    def _draw_rectangle(self, cr, x, y, w, h, color,
+            line_width = DEFAULT_LINE_WIDTH):
+        cr.set_source_color(color)
+        cr.rectangle(x, y, w, h)
+        cr.fill_preserve()
+        cr.set_line_width(line_width)
+        cr.set_line_join(cairo.LINE_JOIN_ROUND)
+        cr.stroke()
+
     def do_expose_event(self, event):
         # The do_expose_event is called when the widget is asked to draw itself
 
         x, y, w, h = self.allocation
         cr = self.window.cairo_create()
 
-        self._draw_rectangle(cr, w, h)
+        self._draw(cr, w, h)
 
         # draw the value in the centre of the control
         fontw, fonth = self._layout.get_pixel_size()

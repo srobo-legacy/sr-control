@@ -34,7 +34,7 @@ class OutputSwitch(IOWidgetBase):
         else:
             return '<span color="black">0</span>'
 
-    def _draw_rectangle(self, cr, w, h):
+    def _draw(self, cr, w, h):
         if self.state == STATE_SELECTED:
             # Draw the arrows
             cr.set_source_rgb(0, 0, 0)
@@ -52,16 +52,16 @@ class OutputSwitch(IOWidgetBase):
 
         # Set the rectangle color
         if self.value == 1:
-            cr.set_source_color(_INPUT_ON_COLOR)
+            color = _INPUT_ON_COLOR
         else:
-            cr.set_source_color(_INPUT_OFF_COLOR)
+            color = _INPUT_OFF_COLOR
 
         # Draw the rectangle
-        cr.rectangle(_BORDER_WIDTH, _BORDER_WIDTH + _ARROW_BORDER,
-                     w - 2*_BORDER_WIDTH, h - 2*(_BORDER_WIDTH + _ARROW_BORDER))
-        cr.fill_preserve()
-        cr.set_line_width(5.0)
-        cr.set_line_join(cairo.LINE_JOIN_ROUND)
-        cr.stroke()
+        self._draw_rectangle(cr,
+                             _BORDER_WIDTH,
+                             _BORDER_WIDTH + _ARROW_BORDER,
+                             w - 2*_BORDER_WIDTH,
+                             h - 2*(_BORDER_WIDTH + _ARROW_BORDER),
+                             color)
 
 gobject.type_register(IOWidgetBase)
