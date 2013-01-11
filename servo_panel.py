@@ -8,6 +8,8 @@ from selectable_label import SelectableLabel
 
 NUM_SERVOS = 8
 
+_SLIDER_NOTCH = 5
+
 class ServoPanel(Table):
     ## Servo selection and manipulation ##
 
@@ -26,18 +28,21 @@ class ServoPanel(Table):
             self.labels[self.selected_servo].set_state(STATE_SELECTED)
 
     def set_servo(self, num, value):
-        return None
-        #self.servos[num].set_value(value)
+        self.sliders[num].set_value(value)
         # TODO: Actually set the value
+
+    def change_servo(self, num, notches):
+        value = self.sliders[num].get_value()
+        self.set_servo(num, value + notches * _SLIDER_NOTCH)
 
     ## Event handlers ##
 
     def key_press(self, widget, event):
         if event.keyval == keysyms.Up:
-            self.set_servo(self.selected_servo, 1)
+            self.change_servo(self.selected_servo, 1)
 
         elif event.keyval == keysyms.Down:
-            self.set_servo(self.selected_servo, 0)
+            self.change_servo(self.selected_servo, -1)
 
         elif event.keyval == keysyms.Page_Up:
             self.prev_servo()
@@ -66,14 +71,15 @@ class ServoPanel(Table):
         self.attach(create_heading("Servo Board", "sans bold 12"), 0, NUM_SERVOS + 1, 0, 1,
                     yoptions=SHRINK)
 
-        adjustment = None  # TODO
-
         for i in range(NUM_SERVOS):
             # Heading
             self.labels.append(SelectableLabel(str(i)))
             self.attach(self.labels[i], i, i + 1, 1, 2, yoptions=SHRINK)
             # Slider
-            self.sliders.append(VScale(adjustment))
+            adj = Adjustment(value = 0, lower = 0, upper = 100)
+            self.sliders.append(VScale(adj))
+            self.sliders[i].set_inverted(True)
+            self.sliders[i].set_value_pos(POS_BOTTOM)
             self.attach(self.sliders[i], i, i + 1, 2, 3)
 
         self.labels[self.selected_servo].set_state(STATE_SELECTED)
