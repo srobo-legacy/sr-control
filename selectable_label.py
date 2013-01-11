@@ -31,7 +31,6 @@ class SelectableLabel(RectBase):
             self._layout.set_markup('<span color="black">%s</span>'
                                     % self.text)
 
-        self.last_text = self.text
         self.last_state = self.state
 
     def set_text(self, text):

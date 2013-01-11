@@ -33,10 +33,4 @@ class IOWidgetBase(RectBase):
         RectBase.__init__(self)
         self.set_value(value)
 
-    # Override the size request to make IO widgets bigger
-    def do_size_request(self, requisition):
-        width, height = self._layout.get_size()
-        requisition.width = width // pango.SCALE + BORDER_WIDTH
-        requisition.height = height // pango.SCALE + BORDER_WIDTH*2
-
 gobject.type_register(IOWidgetBase)

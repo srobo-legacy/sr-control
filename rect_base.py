@@ -63,8 +63,8 @@ class RectBase(Widget):
     def do_size_request(self, requisition):
         # Request enough space for the text and a border
         width, height = self._layout.get_size()
-        requisition.width = width // pango.SCALE
-        requisition.height = height // pango.SCALE
+        requisition.width = width // pango.SCALE + BORDER_WIDTH
+        requisition.height = height // pango.SCALE + BORDER_WIDTH*2
 
     def do_size_allocate(self, allocation):
         # The do_size_allocate is called by when the actual size is known
