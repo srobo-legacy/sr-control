@@ -112,9 +112,8 @@ class Controller:
 
         # Sample list data
         panel_list_store = ListStore(str, Widget)
-        panel_list_store.append(["Foo", panels.create_panel("Foo")])
-        panel_list_store.append(["Bar", panels.create_panel("Bar")])
-        panel_list_store.append(["Baz", panels.create_panel("Baz")])
+        panel_list_store.append(["IOPanel", panels.create_panel("IOPanel")])
+        panel_list_store.append(["ServoPanel", panels.create_panel("ServoPanel")])
 
         # Panel list
         panel_list = TreeView(panel_list_store)
