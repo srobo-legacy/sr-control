@@ -2,6 +2,8 @@ import gobject
 import pygtk
 pygtk.require('2.0')
 from gtk import *
+#from sr import *
+
 import panels
 
 UPDATE_FREQUENCY = 1000
@@ -96,7 +98,7 @@ class Controller:
 
     ## Constructor ##
 
-    def __init__(self):
+    def __init__(self, R = None):
         window = Window(WINDOW_TOPLEVEL)
 
         window.set_events(gdk.KEY_PRESS_MASK)
@@ -110,7 +112,7 @@ class Controller:
         gobject.signal_new("panel-update", Widget, gobject.SIGNAL_RUN_FIRST, gobject.TYPE_NONE, ())
         self.start_timer()
 
-        # Sample list data
+        # List data
         panel_list_store = ListStore(str, Widget)
         panel_list_store.append(["IOPanel", panels.create_panel("IOPanel")])
         panel_list_store.append(["ServoPanel", panels.create_panel("ServoPanel")])
@@ -158,5 +160,5 @@ class Controller:
         main()
 
 
-cont = Controller()
+cont = Controller()#Robot(init_vision = False))
 cont.main()

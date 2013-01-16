@@ -55,7 +55,7 @@ class ServoPanel(Table):
     labels = []
     sliders = []
 
-    def __init__(self, board):
+    def __init__(self, board = None):
         Table.__init__(self, 3, NUM_SERVOS)
 
         def create_heading(text, font_description):

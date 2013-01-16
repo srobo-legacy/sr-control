@@ -29,7 +29,10 @@ class IOPanel(Table):
 
     def set_output(self, num, value):
         self.outputs[num].set_value(value)
-        # TODO: Actually set the value
+        if self.board <> None:
+            self.board.output[num].d = value
+        else:
+            self.outputs[num].queue_draw()
 
     ## Event handlers ##
 
@@ -46,10 +49,22 @@ class IOPanel(Table):
         elif event.keyval == keysyms.Page_Down:
             self.next_output()
 
+    def panel_update(self, _):
+        if self.board == None:
+            return None
+
+        for i in range(NUM_IO_PINS):
+            # Update input and output displays
+            self.inputs_a[i].set_value(self.board.input[i].a)
+            self.inputs_d[i].set_value(self.board.input[i].d)
+            self.outputs[i].set_value(self.board.output[i].d)
+
     ## Constructor ##
 
-    def __init__(self, board):
+    def __init__(self, board = None):
         Table.__init__(self, 11, NUM_IO_PINS)
+
+        self.board = board
 
         def create_heading(text, font_description):
             """Creates a new label with the given text and font, which is centre aligned."""
@@ -94,7 +109,10 @@ class IOPanel(Table):
 
         self.outputs[0].set_state(STATE_SELECTED)
 
+        self.panel_update(None)
+
         self.show_all()
 
         ## Signals ##
         self.connect("key-press-event", self.key_press)
+        self.connect("panel-update", self.panel_update)
