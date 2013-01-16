@@ -29,7 +29,7 @@ class IOPanel(Table):
 
     def set_output(self, num, value):
         self.outputs[num].set_value(value)
-        self.board.outputs[num].d = value
+        self.board.output[num].d = value
 
     ## Event handlers ##
 
@@ -46,7 +46,7 @@ class IOPanel(Table):
         elif event.keyval == keysyms.Page_Down:
             self.next_output()
 
-    def panel_update(self):
+    def panel_update(self, _):
         for i in range(NUM_IO_PINS):
             # Update input and output displays
             self.inputs_a[i].set_value(self.board.input[i].a)
@@ -103,7 +103,7 @@ class IOPanel(Table):
 
         self.outputs[0].set_state(STATE_SELECTED)
 
-        self.update()
+        self.panel_update(None)
 
         self.show_all()
 

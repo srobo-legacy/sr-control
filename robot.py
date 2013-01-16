@@ -115,7 +115,7 @@ class Controller:
         panel_list_store = ListStore(str, Widget)
         for i in range(len(R.io)):
             panel_list_store.append(["I/O Board " + str(i),
-                    panels.create_panel(panels.JIO_PANEL, R.io[i])])
+                    panels.create_panel(R.io[i])])
 
         #panel_list_store.append(["Foo", panels.create_panel("Foo")])
         #panel_list_store.append(["Bar", panels.create_panel("Bar")])

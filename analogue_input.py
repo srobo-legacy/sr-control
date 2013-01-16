@@ -36,9 +36,9 @@ class AnalogueInput(IOWidgetBase):
 
     def _get_markup(self, value):
         if value > _MAX_INPUT_VOLTAGE / 2:
-            return str.format('<span color="white">{:.1f}</span>', self.value)
+            return str.format('<span color="white">{0:.1f}</span>', self.value)
         else:
-            return str.format('<span color="black">{:.1f}</span>', self.value)
+            return str.format('<span color="black">{0:.1f}</span>', self.value)
 
     def _draw_rectangle(self, cr, w, h):
         if self.value > 0:
