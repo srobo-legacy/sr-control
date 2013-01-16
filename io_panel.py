@@ -31,8 +31,8 @@ class IOPanel(Table):
         self.outputs[num].set_value(value)
         if self.board <> None:
             self.board.output[num].d = value
-        else:
-            self.outputs[num].queue_draw()
+
+        self.outputs[num].queue_draw()
 
     ## Event handlers ##
 
