@@ -20,6 +20,7 @@ except ImportError:
 from analogue_input import AnalogueInput
 from digital_input import DigitalInput
 from selectable_label import SelectableLabel
+from dial import Dial
 
 def _main(args):
     win = Window()
@@ -27,7 +28,7 @@ def _main(args):
     win.set_title('Widget test')
     win.connect('delete-event', main_quit)
 
-    t = Table(3, 2, True)
+    t = Table(5, 2, True)
 
     l1 = SelectableLabel("1")
     l1.set_state(STATE_SELECTED)
@@ -43,6 +44,8 @@ def _main(args):
     t.attach(y, 1, 2, 1, 2)
     z = AnalogueInput(0.0001)
     t.attach(z, 1, 2, 2, 3)
+    d = Dial(None)
+    t.attach(d, 0, 3, 3, 5)
     win.add(t)
 
     win.show_all()
