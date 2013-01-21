@@ -44,7 +44,8 @@ def _main(args):
     t.attach(y, 1, 2, 1, 2)
     z = AnalogueInput(0.0001)
     t.attach(z, 1, 2, 2, 3)
-    d = Dial(None)
+
+    d = Dial(Adjustment(value=53, lower=-100, upper=100))
     t.attach(d, 0, 3, 3, 5)
     win.add(t)
 

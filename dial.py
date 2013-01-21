@@ -21,18 +21,41 @@ _NEEDLE_COLOR = gdk.Color(0.0, 0.0, 0.0)
 _background_pixbuf = gdk.pixbuf_new_from_file('dial-background-trimmed.png')
 _MIN_WIDTH = 272
 _MIN_HEIGHT = 272
+_ANGLE_MIN = math.pi / 4
+_ANGLE_MAX = 7 * math.pi / 4
 
 class Dial(Widget):
 
     ## Data ##
 
     adjustment = None
+    angle = _ANGLE_MIN
+
+    def recalculate_angle(self):
+        adj = self.adjustment
+        scale = (_ANGLE_MAX - _ANGLE_MIN) / (adj.upper - adj.lower)
+        self.angle = _ANGLE_MIN + (adj.value - adj.lower) * scale
+
+    def set_adjustment(self, adj):
+        self.adjustment = adj
+        self.recalculate_angle()
+
+    def get_adjustment(self):
+        return self.adjustment
+
+    def set_value(self, value):
+        self.adjustment.value = value
+        self.recalculate_angle()
+
+    def get_value(self):
+        return self.adjustment.value
 
     ## Constructor ##
 
     def __init__(self, adj):
         Widget.__init__(self)
         self.adjustment = adj
+        self.recalculate_angle()
         #self._layout = self.create_pango_layout('')
         #self._layout.set_font_description(pango.FontDescription("sans bold 10"))
 
@@ -102,14 +125,13 @@ class Dial(Widget):
                                 h / 2 - _MIN_HEIGHT / 2,
                                 -1, -1)  # Dimensions
 
-        angle = math.pi / 4
         points = [(0.0, 0.4), (0.07, 0.0), (0.0, -0.07), (-0.07, 0.0)]
 
         cr = self.window.cairo_create()
 
         m = cairo.Matrix()
         m.translate(w / 2, h / 2)  # Centre the coordinates
-        m.rotate(angle)
+        m.rotate(self.angle)
         cr.set_matrix(cr.get_matrix().multiply(m))
         cr.set_source_color(_NEEDLE_COLOR)
 
