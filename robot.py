@@ -116,6 +116,7 @@ class Controller:
         panel_list_store = ListStore(str, Widget)
         panel_list_store.append(["IOPanel", panels.create_panel("IOPanel")])
         panel_list_store.append(["ServoPanel", panels.create_panel("ServoPanel")])
+        panel_list_store.append(["MotorPanel", panels.create_panel("MotorPanel")])
 
         # Panel list
         panel_list = TreeView(panel_list_store)
