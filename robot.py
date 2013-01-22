@@ -2,9 +2,15 @@ import gobject
 import pygtk
 pygtk.require('2.0')
 from gtk import *
-#from sr import *
 
-import panels
+try:
+    from sr import *
+    dummy = False
+except ImportError:
+    print "Running as a dummy controller."
+    dummy = True
+
+from panels import create_panel_by_class_name, create_panel
 
 UPDATE_FREQUENCY = 1000
 
@@ -114,9 +120,23 @@ class Controller:
 
         # List data
         panel_list_store = ListStore(str, Widget)
-        panel_list_store.append(["IOPanel", panels.create_panel("IOPanel")])
-        panel_list_store.append(["ServoPanel", panels.create_panel("ServoPanel")])
-        panel_list_store.append(["MotorPanel", panels.create_panel("MotorPanel")])
+        if R == None:
+            panel_list_store.append(["IOPanel", create_panel_by_class_name("IOPanel")])
+            panel_list_store.append(["ServoPanel", create_panel_by_class_name("ServoPanel")])
+            panel_list_store.append(["MotorPanel", create_panel_by_class_name("MotorPanel")])
+
+        else:
+            for i in range(len(R.io)):
+                panel_list_store.append(["IO Board " + str(i),
+                                        create_panel(R.io[i])])
+
+            for i in range(len(R.servos)):
+                panel_list_store.append(["Servo Board " + str(i),
+                                        create_panel(R.servos[i])])
+
+            for i in range(len(R.motors)):
+                panel_list_store.append(["Motor Board " + str(i),
+                                        create_panel(R.motors[i])])
 
         # Panel list
         panel_list = TreeView(panel_list_store)
@@ -160,6 +180,9 @@ class Controller:
     def main(self):
         main()
 
+if dummy:
+    cont = Controller()
+else:
+    cont = Controller(Robot(init_vision = False))
 
-cont = Controller()#Robot(init_vision = False))
 cont.main()

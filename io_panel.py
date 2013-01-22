@@ -50,9 +50,6 @@ class IOPanel(Table):
             self.next_output()
 
     def panel_update(self, _):
-        if self.board == None:
-            return None
-
         for i in range(NUM_IO_PINS):
             # Update input and output displays
             self.inputs_a[i].set_value(self.board.input[i].a)
@@ -63,8 +60,6 @@ class IOPanel(Table):
 
     def __init__(self, board = None):
         Table.__init__(self, 11, NUM_IO_PINS)
-
-        self.board = board
 
         def create_heading(text, font_description):
             """Creates a new label with the given text and font, which is centre aligned."""
@@ -109,10 +104,14 @@ class IOPanel(Table):
 
         self.outputs[0].set_state(STATE_SELECTED)
 
-        self.panel_update(None)
-
         self.show_all()
 
         ## Signals ##
         self.connect("key-press-event", self.key_press)
-        self.connect("panel-update", self.panel_update)
+
+        # Connect to the board
+        if board <> None:
+            self.panel_update(None)
+            self.connect("panel-update", self.panel_update)
+
+        self.board = board

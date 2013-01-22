@@ -29,7 +29,8 @@ class ServoPanel(Table):
 
     def set_servo(self, num, value):
         self.sliders[num].set_value(value)
-        # TODO: Actually set the value
+        if self.board <> None:
+            self.board[num] = value
 
     def change_servo(self, num, notches):
         value = self.sliders[num].get_value()
@@ -49,6 +50,10 @@ class ServoPanel(Table):
 
         elif event.keyval == keysyms.Page_Down:
             self.next_servo()
+
+    def panel_update(self, _):
+        for i in range(NUM_SERVOS):
+            self.sliders[i].set_value(self.board[i])
 
     ## Constructor ##
 
@@ -88,3 +93,10 @@ class ServoPanel(Table):
 
         ## Signals ##
         self.connect("key-press-event", self.key_press)
+
+        # Connect to the board
+        if board <> None:
+            self.panel_update(None)
+            self.connect("panel-update", self.panel_update)
+
+        self.board = None
