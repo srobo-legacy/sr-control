@@ -18,16 +18,25 @@ class MotorPanel(Table):
             if value <= 100:
                 self.dial.set_value(value)
 
+                if self.board <> None:
+                    self.board.target = value
+
         elif event.keyval == keysyms.Down:
             value = self.dial.get_value() - _MOTOR_STEP
             if value >= -100:
                 self.dial.set_value(value)
+
+                if self.board <> None:
+                    self.board.target = value
 
         elif event.keyval == keysyms.Page_Up:
             print "Motor page up"
 
         elif event.keyval == keysyms.Page_Down:
             print "Motor page down"
+
+    def panel_update(self, _):
+        self.dial.set_value(self.board.target)
 
     ## Constructor ##
 
@@ -41,4 +50,9 @@ class MotorPanel(Table):
 
         ## Signals ##
         self.connect("key-press-event", self.key_press)
-        #self.connect("panel-update", self.panel_update)
+
+        if board <> None:
+            self.panel_update(None)
+            self.connect("panel-update", self.panel_update)
+
+        self.board = board
