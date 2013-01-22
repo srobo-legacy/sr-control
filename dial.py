@@ -35,6 +35,7 @@ class Dial(Widget):
         adj = self.adjustment
         scale = (_ANGLE_MAX - _ANGLE_MIN) / (adj.upper - adj.lower)
         self.angle = _ANGLE_MIN + (adj.value - adj.lower) * scale
+        self.queue_draw()
 
     def set_adjustment(self, adj):
         self.adjustment = adj
@@ -45,6 +46,10 @@ class Dial(Widget):
 
     def set_value(self, value):
         self.adjustment.value = value
+
+        # Change the label
+        self._layout.set_markup(str.format('{0:.1f}', value))
+
         self.recalculate_angle()
 
     def get_value(self):
@@ -54,10 +59,13 @@ class Dial(Widget):
 
     def __init__(self, adj):
         Widget.__init__(self)
+
+        self._layout = self.create_pango_layout('')
+        self._layout.set_font_description(pango.FontDescription("sans bold 10"))
+        self._layout.set_markup(str.format('{0:.1f}', adj.value))
+
         self.adjustment = adj
         self.recalculate_angle()
-        #self._layout = self.create_pango_layout('')
-        #self._layout.set_font_description(pango.FontDescription("sans bold 10"))
 
     ## GtkWidget methods ##
 
@@ -125,9 +133,14 @@ class Dial(Widget):
                                 h / 2 - _MIN_HEIGHT / 2,
                                 -1, -1)  # Dimensions
 
-        points = [(0.0, 0.4), (0.07, 0.0), (0.0, -0.07), (-0.07, 0.0)]
-
+        fontw, fonth = self._layout.get_pixel_size()
         cr = self.window.cairo_create()
+
+        cr.move_to((w - fontw)/2, 0.75 * h - fonth / 2)
+        cr.update_layout(self._layout)
+        cr.show_layout(self._layout)
+
+        points = [(0.0, 0.4), (0.07, 0.0), (0.0, -0.07), (-0.07, 0.0)]
 
         m = cairo.Matrix()
         m.translate(w / 2, h / 2)  # Centre the coordinates
@@ -145,9 +158,5 @@ class Dial(Widget):
         cr.close_path()
         cr.fill()
 
-        #fontw, fonth = self._layout.get_pixel_size()
-        #cr.move_to((w - fontw)/2, (h - fonth)/2)
-        #cr.update_layout(self._layout)
-        #cr.show_layout(self._layout)
 
 gobject.type_register(Dial)
