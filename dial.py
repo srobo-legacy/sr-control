@@ -145,7 +145,7 @@ class Dial(Widget):
         m = cairo.Matrix()
         m.translate(w / 2, h / 2)  # Centre the coordinates
         m.rotate(self.angle)
-        cr.set_matrix(cr.get_matrix().multiply(m))
+        cr.set_matrix(m)
         cr.set_source_color(_NEEDLE_COLOR)
 
         # Draw the points
