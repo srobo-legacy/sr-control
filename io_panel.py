@@ -110,8 +110,8 @@ class IOPanel(Table):
         self.connect("key-press-event", self.key_press)
 
         # Connect to the board
+        self.board = board
+
         if board <> None:
             self.panel_update(None)
             self.connect("panel-update", self.panel_update)
-
-        self.board = board

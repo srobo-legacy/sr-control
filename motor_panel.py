@@ -51,8 +51,9 @@ class MotorPanel(Table):
         ## Signals ##
         self.connect("key-press-event", self.key_press)
 
+        self.board = board
+
         if board <> None:
             self.panel_update(None)
             self.connect("panel-update", self.panel_update)
 
-        self.board = board
