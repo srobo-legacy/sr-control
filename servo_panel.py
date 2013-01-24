@@ -8,7 +8,7 @@ from selectable_label import SelectableLabel
 
 NUM_SERVOS = 8
 
-_SLIDER_NOTCH = 5
+_SLIDER_NOTCH = 1
 
 class ServoPanel(Table):
     ## Servo selection and manipulation ##
@@ -29,12 +29,12 @@ class ServoPanel(Table):
 
     def set_servo(self, num, value):
         self.sliders[num].set_value(value)
-        if self.board <> None:
+        if self.board != None:
             self.board[num] = value
 
     def change_servo(self, num, notches):
-        value = self.sliders[num].get_value()
-        self.set_servo(num, value + notches * _SLIDER_NOTCH)
+        value = self.board[num]
+        self.set_servo(num, int(value) + notches * _SLIDER_NOTCH)
 
     ## Event handlers ##
 
@@ -95,8 +95,8 @@ class ServoPanel(Table):
         self.connect("key-press-event", self.key_press)
 
         # Connect to the board
-        self.board = None
+        self.board = board
 
-        if board <> None:
+        if board != None:
             self.panel_update(None)
             self.connect("panel-update", self.panel_update)
