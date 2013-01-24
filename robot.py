@@ -116,6 +116,8 @@ class Controller:
         window.set_events(gdk.KEY_PRESS_MASK)
 
         # Properties
+        window.set_title("Manual Controller" if R != None else
+                            "Manual Controller (dummy)")
         window.set_property("default-width", 480)
         window.set_property("default-height", 272)
         window.set_border_width(5)
