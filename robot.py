@@ -67,6 +67,12 @@ class Controller:
         elif event.keyval == keysyms.Right:
             self.select_next_panel()
 
+        elif event.keyval == keysyms.space:
+            # Stop all motors
+            if self.robot != None:
+                for i in range(len(self.robot.motors)):
+                    self.robot.motors[i].target = 0
+
         else:
             self.current_panel.emit("key-press-event", event)
 
@@ -120,6 +126,7 @@ class Controller:
 
         # List data
         panel_list_store = ListStore(str, Widget)
+        self.robot = R
         if R == None:
             panel_list_store.append(["IOPanel", create_panel_by_class_name("IOPanel")])
             panel_list_store.append(["ServoPanel", create_panel_by_class_name("ServoPanel")])
