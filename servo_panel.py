@@ -20,16 +20,10 @@ class ServoPanel(Table):
 
     selected_servo = 0
 
-    def prev_servo(self):
-        if self.selected_servo > 0:
+    def select(self, offset):
+        if 0 <= self.selected_servo + offset < NUM_SERVOS:
             self.labels[self.selected_servo].set_state(STATE_NORMAL)
-            self.selected_servo = self.selected_servo - 1
-            self.labels[self.selected_servo].set_state(STATE_SELECTED)
-
-    def next_servo(self):
-        if self.selected_servo < NUM_SERVOS - 1:
-            self.labels[self.selected_servo].set_state(STATE_NORMAL)
-            self.selected_servo = self.selected_servo + 1
+            self.selected_servo = self.selected_servo + offset
             self.labels[self.selected_servo].set_state(STATE_SELECTED)
 
     def set_servo(self, num, value):
@@ -59,10 +53,10 @@ class ServoPanel(Table):
             self.sliders[num].modify_fg(STATE_NORMAL, _SET_SERVO_TEXT_COLOR)
 
         elif event.keyval == keysyms.Page_Up:
-            self.prev_servo()
+            self.select(-1)
 
         elif event.keyval == keysyms.Page_Down:
-            self.next_servo()
+            self.select(1)
 
     def panel_update(self, _):
         for i in range(NUM_SERVOS):

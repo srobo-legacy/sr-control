@@ -15,16 +15,10 @@ class IOPanel(Table):
 
     selected_output = 0
 
-    def prev_output(self):
-        if self.selected_output > 0:
+    def select(self, offset):
+        if 0 <= self.selected_output + offset < NUM_IO_PINS:
             self.outputs[self.selected_output].set_state(STATE_NORMAL)
-            self.selected_output = self.selected_output - 1
-            self.outputs[self.selected_output].set_state(STATE_SELECTED)
-
-    def next_output(self):
-        if self.selected_output < NUM_IO_PINS - 1:
-            self.outputs[self.selected_output].set_state(STATE_NORMAL)
-            self.selected_output = self.selected_output + 1
+            self.selected_output = self.selected_output + offset
             self.outputs[self.selected_output].set_state(STATE_SELECTED)
 
     def set_output(self, num, value):
@@ -44,10 +38,10 @@ class IOPanel(Table):
             self.set_output(self.selected_output, 0)
 
         elif event.keyval == keysyms.Page_Up:
-            self.prev_output()
+            self.select(-1)
 
         elif event.keyval == keysyms.Page_Down:
-            self.next_output()
+            self.select(1)
 
     def panel_update(self, _):
         for i in range(NUM_IO_PINS):
