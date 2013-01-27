@@ -10,6 +10,9 @@ from output_switch import OutputSwitch
 
 NUM_IO_PINS = 8
 
+_HELP_MESSAGE = "(1) or (2) to select output. Turn knob to change."
+# TODO: Try using \u2460 and \u2461 (with u"...") on a power board
+
 class IOPanel(Table):
     ## Output selection and manipulation ##
 
@@ -53,7 +56,7 @@ class IOPanel(Table):
     ## Constructor ##
 
     def __init__(self, board = None):
-        Table.__init__(self, 11, NUM_IO_PINS)
+        Table.__init__(self, 8, NUM_IO_PINS)
 
         def create_heading(text, font_description):
             """Creates a new label with the given text and font, which is centre aligned."""
@@ -66,7 +69,7 @@ class IOPanel(Table):
         def create_column_label(num):
             return Label(str(num))
 
-        ## Inputs ##
+        # Inputs heading
         self.attach(create_heading("Inputs", "sans bold 12"), 0, NUM_IO_PINS, 0, 1)
 
         # Column labels
@@ -89,14 +92,19 @@ class IOPanel(Table):
             self.inputs_d.append(DigitalInput((78 >> i) & 1))
             self.attach(self.inputs_d[i], i, i + 1, 5, 6)
 
-        ## Outputs ##
-        self.attach(create_heading("Outputs", "sans bold 12"), 0, NUM_IO_PINS, 6, 7)
+        # Outputs
+        self.attach(create_heading("Outputs", "sans bold 12"), 0, NUM_IO_PINS,
+                    6, 7, yoptions=SHRINK)
         self.outputs = []
         for i in range(NUM_IO_PINS):
             self.outputs.append(OutputSwitch((82 >> i) & 1))
             self.attach(self.outputs[i], i, i + 1, 7, 8)
 
         self.outputs[0].set_state(STATE_SELECTED)
+
+        # Help bar
+        self.help_bar = Label(_HELP_MESSAGE)
+        self.attach(self.help_bar, 0, NUM_IO_PINS + 1, 8, 9, yoptions=SHRINK)
 
         self.show_all()
 

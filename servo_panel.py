@@ -15,8 +15,17 @@ _UNSET_SERVO_COLOR = gdk.Color(1.0, 0.5, 0.0)  # Orange
 _SET_SERVO_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
 _SET_SERVO_TEXT_COLOR = gdk.Color(0.0, 0.0, 0.0)
 
+_SET_SERVO_HELP_MESSAGE = "Turn knob to change value."
+_UNSET_SERVO_HELP_MESSAGE = "Turn knob to choose value. Press knob to set."
+
 class ServoPanel(Table):
     ## Servo selection and manipulation ##
+
+    def update_help_message(self):
+        if self.servo_set[self.selected_servo]:
+            self.help_bar.set_text(_SET_SERVO_HELP_MESSAGE)
+        else:
+            self.help_bar.set_text(_UNSET_SERVO_HELP_MESSAGE)
 
     selected_servo = 0
 
@@ -25,18 +34,23 @@ class ServoPanel(Table):
             self.labels[self.selected_servo].set_state(STATE_NORMAL)
             self.selected_servo = self.selected_servo + offset
             self.labels[self.selected_servo].set_state(STATE_SELECTED)
+            self.update_help_message()
 
     def set_servo(self, num, value):
         self.sliders[num].set_value(value)
         if self.board != None and self.servo_set[num]:
             self.board[num] = value
-            print "Output",num,"set."
 
     def change_servo(self, num, notches):
         value = self.sliders[num].get_value()
         self.set_servo(num, int(value) + notches * _SLIDER_NOTCH)
 
     ## Event handlers ##
+
+    def size_allocate(self, widget, allocation):
+        # Set the help label's size
+        # (stops the columns changing size when the help text changes.)
+        self.help_bar.set_size_request(allocation.width, -1)
 
     def key_press(self, widget, event):
         if event.keyval == keysyms.Up:
@@ -46,9 +60,12 @@ class ServoPanel(Table):
             self.change_servo(self.selected_servo, -1)
 
         elif event.keyval == keysyms.Return:
+            # Set the servo to the value
             num = self.selected_servo
             self.servo_set[num] = True
             self.set_servo(num, self.sliders[num].get_value())
+            # Update the UI
+            self.update_help_message()
             self.sliders[num].modify_bg(STATE_NORMAL, _SET_SERVO_COLOR)
             self.sliders[num].modify_fg(STATE_NORMAL, _SET_SERVO_TEXT_COLOR)
 
@@ -76,7 +93,7 @@ class ServoPanel(Table):
     servo_set = []
 
     def __init__(self, board = None):
-        Table.__init__(self, 3, NUM_SERVOS)
+        Table.__init__(self, 4, NUM_SERVOS)
 
         def create_heading(text, font_description):
             """Creates a new label with the given text and font, which is centre aligned."""
@@ -109,9 +126,14 @@ class ServoPanel(Table):
 
         self.labels[self.selected_servo].set_state(STATE_SELECTED)
 
+        self.help_bar = Label()
+        self.attach(self.help_bar, 0, NUM_SERVOS + 1, 3, 4, yoptions=SHRINK, xoptions=SHRINK)
+        self.update_help_message()
+
         self.show_all()
 
         ## Signals ##
+        self.connect("size-allocate", self.size_allocate)
         self.connect("key-press-event", self.key_press)
 
         # Connect to the board
