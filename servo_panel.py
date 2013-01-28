@@ -92,7 +92,7 @@ class ServoPanel(Table):
     sliders = []
     servo_set = []
 
-    def __init__(self, board = None):
+    def __init__(self, controller, board = None):
         Table.__init__(self, 4, NUM_SERVOS)
 
         def create_heading(text, font_description):

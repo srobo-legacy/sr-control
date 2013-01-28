@@ -130,22 +130,22 @@ class Controller:
         panel_list_store = ListStore(str, Widget)
         self.robot = R
         if R == None:
-            panel_list_store.append(["IOPanel", create_panel_by_class_name("IOPanel")])
-            panel_list_store.append(["ServoPanel", create_panel_by_class_name("ServoPanel")])
-            panel_list_store.append(["MotorPanel", create_panel_by_class_name("MotorPanel")])
+            panel_list_store.append(["IOPanel", create_panel_by_class_name(self, "IOPanel")])
+            panel_list_store.append(["ServoPanel", create_panel_by_class_name(self, "ServoPanel")])
+            panel_list_store.append(["MotorPanel", create_panel_by_class_name(self, "MotorPanel")])
 
         else:
             for i in range(len(R.io)):
                 panel_list_store.append(["IO Board " + str(i),
-                                        create_panel(R.io[i])])
+                                        create_panel(self, R.io[i])])
 
             for i in range(len(R.servos)):
                 panel_list_store.append(["Servo Board " + str(i),
-                                        create_panel(R.servos[i])])
+                                        create_panel(self, R.servos[i])])
 
             for i in range(len(R.motors)):
                 panel_list_store.append(["Motor Board " + str(i),
-                                        create_panel(R.motors[i])])
+                                        create_panel(self, R.motors[i])])
 
         # Panel list
         panel_list = TreeView(panel_list_store)

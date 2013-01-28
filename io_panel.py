@@ -55,7 +55,7 @@ class IOPanel(Table):
 
     ## Constructor ##
 
-    def __init__(self, board = None):
+    def __init__(self, controller, board = None):
         Table.__init__(self, 8, NUM_IO_PINS)
 
         def create_heading(text, font_description):

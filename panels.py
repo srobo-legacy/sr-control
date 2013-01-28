@@ -19,14 +19,14 @@ board_to_panel = {
     'Motor'  : MotorPanel
 }
 
-def create_panel_by_class_name(class_name):
+def create_panel_by_class_name(controller, class_name):
     """Creates and returns a control panel for the given board."""
     if class_name == "IOPanel":
-        return IOPanel()
+        return IOPanel(controller)
     elif class_name == "ServoPanel":
-        return ServoPanel()
+        return ServoPanel(controller)
     else:
-        return MotorPanel()
+        return MotorPanel(controller)
 
-def create_panel(board):
-    return board_to_panel[board.__class__.__name__](board)
+def create_panel(controller, board):
+    return board_to_panel[board.__class__.__name__](controller, board)

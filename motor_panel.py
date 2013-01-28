@@ -42,7 +42,7 @@ class MotorPanel(Table):
 
     ## Constructor ##
 
-    def __init__(self, board = None):
+    def __init__(self, controller, board = None):
         Table.__init__(self, 2, 1)
 
         self.dial = Dial(Adjustment(lower=-100, value=0, upper=100))
@@ -57,8 +57,8 @@ class MotorPanel(Table):
         self.connect("key-press-event", self.key_press)
 
         self.board = board
+        self.controller = controller
 
         if board <> None:
             self.panel_update(None)
             self.connect("panel-update", self.panel_update)
-
