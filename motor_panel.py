@@ -8,6 +8,8 @@ from dial import Dial
 
 _MOTOR_STEP = 5
 
+_HELP_MESSAGE = "Turn right knob to change speed."
+
 class MotorPanel(Table):
 
     ## Event handlers ##
@@ -41,10 +43,13 @@ class MotorPanel(Table):
     ## Constructor ##
 
     def __init__(self, board = None):
-        Table.__init__(self, 1, 1)
+        Table.__init__(self, 2, 1)
 
         self.dial = Dial(Adjustment(lower=-100, value=0, upper=100))
         self.attach(self.dial, 0, 1, 0, 1)
+
+        self.help_bar = Label(_HELP_MESSAGE)
+        self.attach(self.help_bar, 0, 1, 1, 2)
 
         self.show_all()
 
