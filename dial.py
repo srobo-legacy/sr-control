@@ -18,9 +18,11 @@ import math
 
 _NEEDLE_COLOR = gdk.Color(0.0, 0.0, 0.0)
 
+# The image for the dial, and associated constants
 _background_pixbuf = gdk.pixbuf_new_from_file('dial-background-trimmed.png')
 _MIN_WIDTH = 272
-_MIN_HEIGHT = 272
+_MIN_HEIGHT = 234
+_DIAL_CENTER_OFFSET = (0, 19)
 _ANGLE_MIN = math.pi / 4
 _ANGLE_MAX = 7 * math.pi / 4
 
@@ -136,14 +138,17 @@ class Dial(Widget):
         fontw, fonth = self._layout.get_pixel_size()
         cr = self.window.cairo_create()
 
-        cr.move_to((w - fontw)/2, 0.75 * h - fonth / 2)
+        # Draw the speed label
+        cr.move_to((w - fontw)/2, h - fonth)
         cr.update_layout(self._layout)
         cr.show_layout(self._layout)
 
-        points = [(0.0, 0.4), (0.07, 0.0), (0.0, -0.07), (-0.07, 0.0)]
+        points = [(0.0, 0.5), (0.07, 0.0), (0.0, -0.07), (-0.07, 0.0)]
+
+        offsetX, offsetY = _DIAL_CENTER_OFFSET
 
         m = cairo.Matrix()
-        m.translate(w / 2, h / 2)  # Centre the coordinates
+        m.translate(w / 2 + offsetX, h / 2 + offsetY)  # Centre the coordinates
         m.rotate(self.angle)
         cr.set_matrix(m)
         cr.set_source_color(_NEEDLE_COLOR)
