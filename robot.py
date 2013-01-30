@@ -42,13 +42,13 @@ class Controller:
 
         sel = self.panel_list.get_selection()
         prev_iter = previous(self.panel_list_store, sel.get_selected()[1])
-        if prev_iter <> None:
+        if prev_iter != None:
             sel.select_path(self.panel_list_store.get_path(prev_iter))
 
     def select_next_panel(self):
         sel = self.panel_list.get_selection()
         next_iter = self.panel_list_store.iter_next(sel.get_selected()[1])
-        if next_iter <> None:
+        if next_iter != None:
             sel.select_path(self.panel_list_store.get_path(next_iter))
 
     ## Event handlers ##
@@ -115,14 +115,14 @@ class Controller:
         if self.robot != None:
             motor_running = False
             for i in range(len(self.robot.motors)):
-                if self.robots.motors[i].target != 0:
+                if self.robot.motors[i].target != 0:
                     motor_running = True
                     break
 
             if motor_running:
-                self.stop_button.hide()
-            else:
                 self.stop_button.show()
+            else:
+                self.stop_button.hide()
 
         return True
 
