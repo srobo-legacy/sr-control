@@ -26,7 +26,7 @@ class IOPanel(Table):
 
     def set_output(self, num, value):
         self.outputs[num].set_value(value)
-        if self.board <> None:
+        if self.board != None:
             self.board.output[num].d = value
 
         self.outputs[num].queue_draw()
@@ -47,11 +47,16 @@ class IOPanel(Table):
             self.select(1)
 
     def panel_update(self, _):
+        with self.board.dev.lock:
+            outputs = self.board._output_get()
+            inputs_a = self.board._inputs_read_a()
+            inputs_d = self.board._inputs_read_d()
+
         for i in range(NUM_IO_PINS):
             # Update input and output displays
-            self.inputs_a[i].set_value(self.board.input[i].a)
-            self.inputs_d[i].set_value(self.board.input[i].d)
-            self.outputs[i].set_value(self.board.output[i].d)
+            self.inputs_a[i].set_value(inputs_a[i])
+            self.inputs_d[i].set_value(inputs_d[i])
+            self.outputs[i].set_value(outputs[i])
 
     ## Constructor ##
 

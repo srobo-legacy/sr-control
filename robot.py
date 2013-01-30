@@ -12,7 +12,7 @@ except ImportError:
 
 from panels import create_panel_by_class_name, create_panel
 
-UPDATE_FREQUENCY = 1000
+UPDATE_FREQUENCY = 100
 
 class Controller:
 
