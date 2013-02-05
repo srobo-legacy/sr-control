@@ -151,9 +151,9 @@ class Controller:
         panel_list_store = ListStore(str, Widget)
         self.robot = R
         if R == None:
-            panel_list_store.append(["IOPanel", create_panel_by_class_name(self, "IOPanel")])
-            panel_list_store.append(["ServoPanel", create_panel_by_class_name(self, "ServoPanel")])
-            panel_list_store.append(["MotorPanel", create_panel_by_class_name(self, "MotorPanel")])
+            panel_list_store.append(["IO Board 0", create_panel_by_class_name(self, "IOPanel")])
+            panel_list_store.append(["Servo Board 0", create_panel_by_class_name(self, "ServoPanel")])
+            panel_list_store.append(["Motor Board 0", create_panel_by_class_name(self, "MotorPanel")])
 
         else:
             for i in range(len(R.io)):
