@@ -80,11 +80,6 @@ class ServoPanel(Table):
             value = self.board[i]
             if self.servo_set[i]:
                 self.sliders[i].set_value(value)
-            else:
-                if value <= 100:
-                    self.sliders[i].modify_bg(STATE_NORMAL, _SET_SERVO_COLOR)
-                    self.sliders[i].modify_fg(STATE_NORMAL, _SET_SERVO_TEXT_COLOR)
-                    self.servo_set[i] = True
 
     ## Constructor ##
 
