@@ -1,14 +1,29 @@
+import getopt
 import gobject
 import pygtk
+import sys
 pygtk.require('2.0')
 from gtk import *
 
+# if sr module doesn't exist, definitely not running on a robot.
 try:
     from sr import *
     dummy = False
 except ImportError:
     print "Running as a dummy controller."
     dummy = True
+
+# check for dummy switch
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "d", ["dummy"])
+except getopt.GetoptError:
+    print sys.argv[0] + " [-d|--dummy]"
+    sys.exit(1)
+
+for opt, arg in opts:
+    if opt in ("-d", "--dummy"):
+        dummy = True
+        print "Dummy mode forced."
 
 from panels import create_panel_by_class_name, create_panel
 
