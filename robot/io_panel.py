@@ -54,8 +54,12 @@ class IOPanel(Table):
 
         for i in range(NUM_IO_PINS):
             # Update input and output displays
-            self.inputs_a[i].set_value(inputs_a[i])
-            self.inputs_d[i].set_value(inputs_d[i])
+            if self.inputs_a[i].value != inputs_a[i]:
+                self.inputs_a[i].set_value(inputs_a[i])
+                self.inputs_d[i].set_value(inputs_d[i])
+                self.inputs_a[i].queue_draw()
+                self.inputs_d[i].queue_draw()
+
             self.outputs[i].set_value(outputs[i])
 
     ## Constructor ##
