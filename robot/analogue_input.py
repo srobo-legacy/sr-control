@@ -41,11 +41,12 @@ class AnalogueInput(IOWidgetBase):
             return str.format('<span color="black">{0:.1f}</span>', self.value)
 
     def _draw(self, cr, w, h):
-        if self.value > 0:
-            inner_height = h - 2 * _BORDER_WIDTH
-            top = (1 - self.value / _MAX_INPUT_VOLTAGE) * inner_height
-            line_width = min(DEFAULT_LINE_WIDTH, inner_height - top)
-            padding = line_width / 2
+        inner_height = h - 2 * _BORDER_WIDTH
+        top = (1 - self.value / _MAX_INPUT_VOLTAGE) * inner_height
+        line_width = min(DEFAULT_LINE_WIDTH, inner_height - top)
+        padding = line_width / 2
+        blue_rect_height = h - 2 * (_BORDER_WIDTH + padding) - top
+        if blue_rect_height > 0:
 
             # Draw the background rectangle
             self._draw_rectangle(cr,
@@ -60,7 +61,7 @@ class AnalogueInput(IOWidgetBase):
                          _BORDER_WIDTH + padding,
                          top + _BORDER_WIDTH + padding,
                          w - 2 * (_BORDER_WIDTH + padding),
-                         h - 2 * (_BORDER_WIDTH + padding) - top,
+                         blue_rect_height,
                          _INPUT_ON_COLOR,
                          line_width = line_width)
 
