@@ -5,6 +5,7 @@ from gtk import *
 from io_panel import IOPanel
 from servo_panel import ServoPanel
 from motor_panel import MotorPanel
+from power_panel import PowerPanel
 
 BB_PANEL = 0
 POWER_PANEL = 1
@@ -16,7 +17,8 @@ VISION_PANEL = 5
 board_to_panel = {
     'JointIO': IOPanel,
     'Servo'  : ServoPanel,
-    'Motor'  : MotorPanel
+    'Motor'  : MotorPanel,
+    'Power'  : PowerPanel
 }
 
 def create_panel_by_class_name(controller, class_name):
@@ -25,6 +27,8 @@ def create_panel_by_class_name(controller, class_name):
         return IOPanel(controller)
     elif class_name == "ServoPanel":
         return ServoPanel(controller)
+    elif class_name == "PowerPanel":
+        return PowerPanel(controller)
     else:
         return MotorPanel(controller)
 
