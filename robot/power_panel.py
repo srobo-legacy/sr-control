@@ -28,12 +28,14 @@ class PowerPanel(Table):
             self.toggle_motor_rail()
 
     def panel_update(self, _):
-        print "Updating yo"
         voltage = self.board.battery.voltage
         current = self.board.battery.current
 
         self.voltage.set_value(voltage)
         self.current.set_value(current)
+        self.voltage.queue_draw()
+        self.current.queue_draw()
+
 
     ## Constructor ##
 
