@@ -5,8 +5,7 @@ from gtk import *
 import pango
 
 from output_switch import OutputSwitch
-from voltage import Voltage
-from current import Current
+from analogue_input import AnalogueInput
 
 _HELP_MESSAGE = "Press right knob to toggle motor rail."
 # TODO: Try using \u2460 and \u2461 (with u"...") on a power board
@@ -60,11 +59,11 @@ class PowerPanel(Table):
         self.attach(create_heading("Power Rail", "sans 10"), 0, 1, 2, 3)
 
         # Battery Voltage control
-        self.voltage = Voltage(12.6)
+        self.voltage = AnalogueInput(12.6, 14)
         self.attach(self.voltage, 1, 2, 0, 1)
 
         # Battery Current control
-        self.current = Current(7.5)
+        self.current = AnalogueInput(7.5, 15)
         self.attach(self.current, 1, 2, 1, 2)
 
         # Motor rail control
