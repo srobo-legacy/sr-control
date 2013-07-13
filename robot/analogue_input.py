@@ -12,10 +12,7 @@ if pygtk_version < (2, 8):
     print "PyGtk 2.8 or later required"
     raise SystemExit
 
-try:
-    import cairo
-except ImportError:
-    raise SystemExit("cairo required")
+import cairo
 
 from rect_base import DEFAULT_LINE_WIDTH
 from io_widget_base import IOWidgetBase
@@ -36,10 +33,8 @@ class AnalogueInput(IOWidgetBase):
     ## Internal Methods ##
 
     def _get_markup(self, value):
-        if value > self.max_value / 2:
-            return str.format('<span color="white">{0:.1f}</span>', self.value)
-        else:
-            return str.format('<span color="black">{0:.1f}</span>', self.value)
+        return '<span color="{1}">{0:.1f}</span>'.format(value,
+            'white' if value > self.max_value / 2 else 'black')
 
     def _draw(self, cr, w, h):
         inner_height = h - 2 * _BORDER_WIDTH

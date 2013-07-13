@@ -10,6 +10,12 @@ from analogue_input import AnalogueInput
 _HELP_MESSAGE = "Press right knob to toggle motor rail."
 # TODO: Try using \u2460 and \u2461 (with u"...") on a power board
 
+_MAX_VOLTAGE = 14
+_DUMMY_VOLTAGE = 12.6
+
+_MAX_CURRENT = 15
+_DUMMY_CURRENT = 7.5
+
 class PowerPanel(Table):
     ## Output selection and manipulation ##
     motor_rail = True
@@ -59,11 +65,11 @@ class PowerPanel(Table):
         self.attach(create_heading("Power Rail", "sans 10"), 0, 1, 2, 3)
 
         # Battery Voltage control
-        self.voltage = AnalogueInput(12.6, 14)
+        self.voltage = AnalogueInput(_DUMMY_VOLTAGE, _MAX_VOLTAGE)
         self.attach(self.voltage, 1, 2, 0, 1)
 
         # Battery Current control
-        self.current = AnalogueInput(7.5, 15)
+        self.current = AnalogueInput(_DUMMY_CURRENT, _MAX_CURRENT)
         self.attach(self.current, 1, 2, 1, 2)
 
         # Motor rail control
@@ -83,6 +89,6 @@ class PowerPanel(Table):
         # Connect to the board
         self.board = board
 
-        if board <> None:
+        if board != None:
             self.panel_update(None)
             self.connect("panel-update", self.panel_update)
