@@ -10,10 +10,7 @@ if pygtk_version < (2, 8):
     print "PyGtk 2.8 or later required"
     raise SystemExit
 
-try:
-    import cairo
-except ImportError:
-    raise SystemExit("cairo required")
+import cairo
 
 from io_widget_base import IOWidgetBase
 
