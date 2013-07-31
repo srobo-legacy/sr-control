@@ -12,10 +12,7 @@ if pygtk_version < (2, 8):
     print "PyGtk 2.8 or later required"
     raise SystemExit
 
-try:
-    import cairo
-except ImportError:
-    raise SystemExit("cairo required")
+import cairo
 
 from rect_base import DEFAULT_LINE_WIDTH
 from io_widget_base import IOWidgetBase
@@ -25,24 +22,23 @@ _INPUT_OFF_COLOR = gdk.Color(1.0, 1.0, 1.0)  # Must be .0
 _INPUT_ON_COLOR = gdk.Color(0.14453125, 0.20703125, 0.44140625)
 # TODO: Put color in some common location
 
-_MAX_INPUT_VOLTAGE = 3.3
 
 class AnalogueInput(IOWidgetBase):
+    max_value = 3.3
 
-    def __init__(self, value):
+    def __init__(self, value, maxv):
         IOWidgetBase.__init__(self, value)
+        self.max_value = maxv
 
     ## Internal Methods ##
 
     def _get_markup(self, value):
-        if value > _MAX_INPUT_VOLTAGE / 2:
-            return str.format('<span color="white">{0:.1f}</span>', self.value)
-        else:
-            return str.format('<span color="black">{0:.1f}</span>', self.value)
+        return '<span color="{1}">{0:.1f}</span>'.format(value,
+            'white' if value > self.max_value / 2 else 'black')
 
     def _draw(self, cr, w, h):
         inner_height = h - 2 * _BORDER_WIDTH
-        top = (1 - self.value / _MAX_INPUT_VOLTAGE) * inner_height
+        top = (1 - self.value / self.max_value) * inner_height
         line_width = min(DEFAULT_LINE_WIDTH, inner_height - top)
         padding = line_width / 2
         blue_rect_height = h - 2 * (_BORDER_WIDTH + padding) - top
