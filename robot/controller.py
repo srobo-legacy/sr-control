@@ -149,6 +149,7 @@ class Controller:
             panel_list_store.append(["IO Board 0", create_panel_by_class_name(self, "IOPanel")])
             panel_list_store.append(["Servo Board 0", create_panel_by_class_name(self, "ServoPanel")])
             panel_list_store.append(["Motor Board 0", create_panel_by_class_name(self, "MotorPanel")])
+            panel_list_store.append(["Power Board", create_panel_by_class_name(self, "PowerPanel")])
 
         else:
             for i in range(len(R.io)):
@@ -162,6 +163,8 @@ class Controller:
             for i in range(len(R.motors)):
                 panel_list_store.append(["Motor Board " + str(i),
                                         create_panel(self, R.motors[i])])
+
+            panel_list_store.append(["Power Board", create_panel(self, R.power)])
 
         # Panel list
         panel_list = TreeView(panel_list_store)
