@@ -90,7 +90,7 @@ class IOPanel(Table):
                                    yoptions=SHRINK)
         self.inputs_a = []
         for i in range(NUM_IO_PINS):
-            self.inputs_a.append(AnalogueInput(i * 3.3 / 8))
+            self.inputs_a.append(AnalogueInput(i * 3.3 / 8, 3.3))
             self.attach(self.inputs_a[i], i, i + 1, 3, 4)
 
         # Digital inputs

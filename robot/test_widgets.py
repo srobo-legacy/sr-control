@@ -12,10 +12,7 @@ from gtk import *
 if pygtk_version < (2, 8):
     raise SystemExit("PyGtk 2.8 or later required")
 
-try:
-    import cairo
-except ImportError:
-    raise SystemExit("cairo required")
+import cairo
 
 from analogue_input import AnalogueInput
 from digital_input import DigitalInput
