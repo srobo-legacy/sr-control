@@ -66,9 +66,9 @@ class Controller:
         elif event.keyval == keysyms.space:
             self.stop_button.set_state(STATE_ACTIVE)
             # Stop all motors
-            if self.robot != None:
-                for i in range(len(self.robot.motors)):
-                    self.robot.motors[i].target = 0
+            #if self.robot != None:
+            #    for i in range(len(self.robot.motors)):
+            #        self.robot.motors[i].target = 0
 
         else:
             self.current_panel.emit("key-press-event", event)
@@ -109,10 +109,11 @@ class Controller:
         # Check to see whether motors are running
         if self.robot != None:
             motor_running = False
-            for i in range(len(self.robot.motors)):
-                if self.robot.motors[i].target != 0:
-                    motor_running = True
-                    break
+            # TODO: stop button
+            #for i in range(len(self.robot.motors)):
+            #    if self.robot.motors[i].target != 0:
+            #        motor_running = True
+            #        break
 
             if motor_running:
                 self.stop_button.show()
@@ -151,17 +152,18 @@ class Controller:
             panel_list_store.append(["Motor Board 0", create_panel_by_class_name(self, "MotorPanel")])
 
         else:
-            for i in range(len(R.io)):
-                panel_list_store.append(["IO Board " + str(i),
-                                        create_panel(self, R.io[i])])
+            #for i in range(len(R.io)):
+            #    panel_list_store.append(["IO Board " + str(i),
+            #                            create_panel(self, R.io[i])])
 
             for i in range(len(R.servos)):
                 panel_list_store.append(["Servo Board " + str(i),
                                         create_panel(self, R.servos[i])])
 
-            for i in range(len(R.motors)):
-                panel_list_store.append(["Motor Board " + str(i),
-                                        create_panel(self, R.motors[i])])
+            for key, board in R.motors.items():
+                if type(key) == int:
+                    panel_list_store.append(["Motor Board " + str(key),
+                                            create_panel(self, board)])
 
         # Panel list
         panel_list = TreeView(panel_list_store)
