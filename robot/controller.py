@@ -66,9 +66,11 @@ class Controller:
         elif event.keyval == keysyms.space:
             self.stop_button.set_state(STATE_ACTIVE)
             # Stop all motors
-            #if self.robot != None:
-            #    for i in range(len(self.robot.motors)):
-            #        self.robot.motors[i].target = 0
+            if self.robot != None:
+                for key, board in self.robot.motors.items():
+                    if type(key) == int:
+                        board.m0.power = 0
+                        board.m1.power = 0
 
         else:
             self.current_panel.emit("key-press-event", event)
@@ -109,11 +111,11 @@ class Controller:
         # Check to see whether motors are running
         if self.robot != None:
             motor_running = False
-            # TODO: stop button
-            #for i in range(len(self.robot.motors)):
-            #    if self.robot.motors[i].target != 0:
-            #        motor_running = True
-            #        break
+            for key, board in self.robot.motors.items():
+                if type(key) == int:
+                    if board.m0.power != 0 or board.m1.power != 0:
+                        motor_running = True
+                        break
 
             if motor_running:
                 self.stop_button.show()
